@@ -3,9 +3,6 @@ import Form from './components/Form';
 import Card from './components/Card';
 
 class App extends Component {
-  // constructor() {
-  //   super();
-  // }
   state = {
     cardName: '',
     cardDescription: '',
@@ -13,10 +10,10 @@ class App extends Component {
     cardAttr2: '',
     cardAttr3: '',
     cardImage: '',
-    cardRare: '',
+    cardRare: 'normal',
     cardTrunfo: false,
     hasTrunfo: false,
-    saveButton: true,
+    isSaveButtonDisabled: true,
   }
 
   // espaço reservado a functions:
@@ -24,17 +21,53 @@ class App extends Component {
     e.preventDefault();
   }
 
-  onInputChange = ({ target }) => { // <-- PAREI AQUI ! INFERNO DE LINT
-    // this.setState({[target.cardName]: target.value});
-    // if (targe.cardName === 'check') {
-    //   this.setState({[target.cardName]: target.check,
-    //   })
-    // };
+  validandoCamposVazios = (cardName, cardDescription, cardImage, cardRare) => (
+    cardName && cardDescription && cardImage && cardRare)
+
+  limitadorDeAtributos = (cardAttr1, cardAttr2, cardAttr3) => {
+    const Attr1 = Number(cardAttr1);
+    const Attr2 = Number(cardAttr2);
+    const Attr3 = Number(cardAttr3);
+    const Max = 90;
+    const MaxTotal = 210;
+    const Atks = Attr1 >= 0 && Attr1 <= Max && Attr2 >= 0
+    && Attr2 <= Max && Attr3 >= 0 && Attr3 <= Max;
+    const AtksSomados = Attr1 + Attr2 + Attr3 <= MaxTotal;
+
+    return Atks && AtksSomados;
+  }
+
+  validandoBotao = () => {
+    this.setState((prevState) => {
+      const {
+        cardName,
+        cardDescription,
+        cardImage,
+        cardRare,
+        cardAttr1,
+        cardAttr2,
+        cardAttr3 } = prevState;
+      if
+      (this.validandoCamposVazios(cardName, cardDescription, cardImage, cardRare)
+      && this.limitadorDeAtributos(cardAttr1, cardAttr2, cardAttr3)) {
+        this.setState({
+          isSaveButtonDisabled: false,
+        });
+      } else {
+        this.setState({
+          isSaveButtonDisabled: true,
+        });
+      }
+    });
+  };
+
+  onInputChange = ({ target }) => {
     const { name } = target;
     const testando = (target.type === 'checkbox') ? target.checked : target.value;
     this.setState({
       [name]: testando,
     });
+    this.validandoBotao();
   }
 
   // fim do espaço reservado a functions
@@ -51,7 +84,7 @@ class App extends Component {
       cardRare,
       cardTrunfo,
       hasTrunfo,
-      saveButton,
+      isSaveButtonDisabled,
     } = this.state;
 
     // Fim do espaço para descontrução.
@@ -69,7 +102,7 @@ class App extends Component {
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
           hasTrunfo={ hasTrunfo }
-          isSaveButtonDisabled={ saveButton }
+          isSaveButtonDisabled={ isSaveButtonDisabled }
           onInputChange={ this.onInputChange }
           onSaveButtonClick={ this.onSaveButtonClick }
         />

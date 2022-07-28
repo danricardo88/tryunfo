@@ -52,6 +52,7 @@ class Form extends Component {
               name="cardDescription"
               onChange={ onInputChange }
               type="text"
+              minLength="5"
               data-testid="description-input"
             />
           </label>
@@ -62,6 +63,8 @@ class Form extends Component {
               name="cardAttr1"
               onChange={ onInputChange }
               type="number"
+              min="0"
+              max="90"
               data-testid="attr1-input"
             />
           </label>
@@ -72,6 +75,8 @@ class Form extends Component {
               name="cardAttr2"
               onChange={ onInputChange }
               type="number"
+              min="0"
+              max="90"
               data-testid="attr2-input"
             />
           </label>
@@ -82,6 +87,8 @@ class Form extends Component {
               name="cardAttr3"
               onChange={ onInputChange }
               type="number"
+              min="0"
+              max="90"
               data-testid="attr3-input"
             />
           </label>
@@ -122,7 +129,7 @@ class Form extends Component {
           </label>
           <br />
           <button
-            name="saveButton"
+            name="isSaveButtonDisabled"
             type="submit"
             data-testid="save-button"
             disabled={ isSaveButtonDisabled }
