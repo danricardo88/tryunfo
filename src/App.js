@@ -14,12 +14,46 @@ class App extends Component {
     cardTrunfo: false,
     hasTrunfo: false,
     isSaveButtonDisabled: true,
+    deckCards: [],
   }
 
   // espaço reservado a functions:
   onSaveButtonClick = (e) => {
     e.preventDefault();
-  }
+    const {
+      cardName,
+      cardDescription,
+      cardImage,
+      cardRare,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardTrunfo,
+      // resetar,
+    } = this.state;
+    this.setState((prevState) => ({ deckCards: [{ ...prevState }.deckCards, {
+      cardName,
+      cardDescription,
+      cardImage,
+      cardRare,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardTrunfo,
+    }],
+    }), () => this.setState({
+      cardName: '',
+      cardDescription: '',
+      cardAttr1: '0',
+      cardAttr2: '0',
+      cardAttr3: '0',
+      cardImage: '',
+      cardRare: 'normal',
+      cardTrunfo: false,
+      // hasTrunfo: false,
+      isSaveButtonDisabled: true,
+    }));
+  };
 
   validandoCamposVazios = (cardName, cardDescription, cardImage, cardRare) => (
     cardName && cardDescription && cardImage && cardRare)
