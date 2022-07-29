@@ -29,7 +29,6 @@ class App extends Component {
       cardAttr2,
       cardAttr3,
       cardTrunfo,
-      // resetar,
     } = this.state;
     this.setState((prevState) => ({ deckCards: [{ ...prevState }.deckCards, {
       cardName,
@@ -49,11 +48,30 @@ class App extends Component {
       cardAttr3: '0',
       cardImage: '',
       cardRare: 'normal',
-      cardTrunfo: false,
-      // hasTrunfo: false,
+      cardTrunfo: '',
+      hasTrunfo: '',
       isSaveButtonDisabled: true,
+    }), () => this.setState({
+      hasTrunfo: cardTrunfo,
     }));
   };
+
+  checandoTrunfo = () => {
+    const { deckCards } = this.state;
+    if (deckCards) {
+      return deckCards.some((card) => card.cardTrunfo);
+    }
+    return false;
+  }
+  //
+  // //checando = () => {
+  //   const { cardTrunfo } = this.state;
+  //   if (cardTrunfo !== false) {
+  //     this.setState({
+  //       hasTrunfo: true,
+  //     });
+  //   }
+  // }
 
   validandoCamposVazios = (cardName, cardDescription, cardImage, cardRare) => (
     cardName && cardDescription && cardImage && cardRare)
@@ -117,8 +135,9 @@ class App extends Component {
       cardImage,
       cardRare,
       cardTrunfo,
-      hasTrunfo,
+      // hasTrunfo,
       isSaveButtonDisabled,
+      // deckCards,
     } = this.state;
 
     // Fim do espaço para descontrução.
@@ -135,7 +154,7 @@ class App extends Component {
           cardImage={ cardImage }
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
-          hasTrunfo={ hasTrunfo }
+          hasTrunfo={ this.checandoTrunfo() }
           isSaveButtonDisabled={ isSaveButtonDisabled }
           onInputChange={ this.onInputChange }
           onSaveButtonClick={ this.onSaveButtonClick }
