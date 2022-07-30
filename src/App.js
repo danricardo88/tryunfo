@@ -122,6 +122,33 @@ class App extends Component {
     this.validandoBotao();
   }
 
+  botaoQueSalvaDeck = () => {
+    const { state } = this;
+    const { deckCards } = state;
+    this.setState({ ...state, deckCards: [...deckCards, state] }, () => {
+      this.checandoTrunfo();
+    });
+  }
+
+  deletaCard = (i) => {
+    const { deckCards } = this.state;
+    const deck = deckCards.map((add) => add.cardName !== i);
+    this.setState({
+      deckCards: deck,
+    }, () => {
+      this.checandoTrunfo();
+    });
+  }
+
+  // deletaCard = (newCard, trunfo) => {
+  //   const { deckCards } = this.state;
+  //   const cartas = deckCards.filter((_card, index) => newCard !== index);
+  //   this.setState({
+  //     deckCards: cartas,
+  //     hasTrunfo: !trunfo,
+  //   });
+  // }
+
   // fim do espaço reservado a functions
 
   render() {
@@ -137,7 +164,7 @@ class App extends Component {
       cardTrunfo,
       // hasTrunfo,
       isSaveButtonDisabled,
-      // deckCards,
+      deckCards,
     } = this.state;
 
     // Fim do espaço para descontrução.
@@ -169,6 +196,28 @@ class App extends Component {
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
         />
+        { deckCards.map((add) => (
+          <div key={ add.cardName }>
+            <Card
+              cardName={ add.cardName }
+              cardDescription={ add.cardDescription }
+              cardAttr1={ add.cardAttr1 }
+              cardAttr2={ add.cardAttr2 }
+              cardAttr3={ add.cardAttr3 }
+              cardImage={ add.cardImage }
+              cardRare={ add.cardRare }
+              cardTrunfo={ add.cardTrunfo }
+            />
+            <button
+              type="button"
+              onClick={ () => this.deletaCard(add.cardName) }
+              data-testid="delete-button"
+            >
+              Excluir
+
+            </button>
+          </div>
+        ))}
       </div>
     );
   }
