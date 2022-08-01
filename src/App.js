@@ -10,7 +10,7 @@ class App extends Component {
     cardAttr2: '',
     cardAttr3: '',
     cardImage: '',
-    cardRare: 'normal',
+    cardRare: '',
     cardTrunfo: false,
     hasTrunfo: false,
     isSaveButtonDisabled: true,
@@ -20,27 +20,12 @@ class App extends Component {
   // espaço reservado a functions:
   onSaveButtonClick = (e) => {
     e.preventDefault();
-    const {
-      cardName,
-      cardDescription,
-      cardImage,
-      cardRare,
-      cardAttr1,
-      cardAttr2,
-      cardAttr3,
+    const { ...carta,
       cardTrunfo,
-    } = this.state;
-    this.setState((prevState) => ({ deckCards: [{ ...prevState }.deckCards, {
-      cardName,
-      cardDescription,
-      cardImage,
-      cardRare,
-      cardAttr1,
-      cardAttr2,
-      cardAttr3,
-      cardTrunfo,
-    }],
-    }), () => this.setState({
+      hasTrunfo,
+      isSaveButtonDisabled, deckCards } = this.state;
+    this.setState({
+      deckCards: [...deckCards, carta],
       cardName: '',
       cardDescription: '',
       cardAttr1: '0',
@@ -48,48 +33,78 @@ class App extends Component {
       cardAttr3: '0',
       cardImage: '',
       cardRare: 'normal',
-      cardTrunfo: '',
-      hasTrunfo: '',
-      isSaveButtonDisabled: true,
-    }), () => this.setState({
-      hasTrunfo: cardTrunfo,
-    }));
-  };
-
-  checandoTrunfo = () => {
-    const { deckCards } = this.state;
-    if (deckCards) {
-      return deckCards.some((card) => card.cardTrunfo);
-    }
-    return false;
+    }, () => { // ok
+      if (deckCards === true) {
+        this.setState({
+          hasTrunfo: true,
+          cardTrunfo: false,
+        });
+      }
+    });
   }
-  //
-  // //checando = () => {
-  //   const { cardTrunfo } = this.state;
-  //   if (cardTrunfo !== false) {
-  //     this.setState({
-  //       hasTrunfo: true,
-  //     });
-  //   }
-  // }
+  //   e.preventDefault();
+  //   const {
+  //     cardName,
+  //     cardDescription,
+  //     cardImage,
+  //     cardRare,
+  //     cardAttr1,
+  //     cardAttr2,
+  //     cardAttr3,
+  //     cardTrunfo,
+  //   } = this.state;
+  //   this.setState((prevState) => ({ deckCards: [{ ...prevState }.deckCards, {
+  //     cardName,
+  //     cardDescription,
+  //     cardImage,
+  //     cardRare,
+  //     cardAttr1,
+  //     cardAttr2,
+  //     cardAttr3,
+  //     cardTrunfo,
+  //   }],
+  //   }), () => this.setState({
+  //     cardName: '',
+  //     cardDescription: '',
+  //     cardAttr1: '0',
+  //     cardAttr2: '0',
+  //     cardAttr3: '0',
+  //     cardImage: '',
+  //     cardRare: 'normal',
+  //     cardTrunfo: '',
+  //     hasTrunfo: '',
+  //     isSaveButtonDisabled: true,
+  //   }), () => this.setState({
+  //     hasTrunfo: cardTrunfo,
+  //   }));
+  // };
 
   validandoCamposVazios = (cardName, cardDescription, cardImage, cardRare) => (
-    cardName && cardDescription && cardImage && cardRare)
+    cardName && cardDescription && cardImage && cardRare);
 
-  limitadorDeAtributos = (cardAttr1, cardAttr2, cardAttr3) => {
+  limitadorDeAtributos = (cardAttr1, cardAttr2, cardAttr3) => { // <--- LIMITA O MÁXIMO DE ATRIBUTOS;
     const Attr1 = Number(cardAttr1);
     const Attr2 = Number(cardAttr2);
     const Attr3 = Number(cardAttr3);
     const Max = 90;
     const MaxTotal = 210;
-    const Atks = Attr1 >= 0 && Attr1 <= Max && Attr2 >= 0
-    && Attr2 <= Max && Attr3 >= 0 && Attr3 <= Max;
+    const Atks = Attr1 >= 0
+    && Attr1 <= Max && Attr2 >= 0
+    && Attr2 <= Max && Attr3 >= 0
+    && Attr3 <= Max;
     const AtksSomados = Attr1 + Attr2 + Attr3 <= MaxTotal;
-
     return Atks && AtksSomados;
   }
 
   validandoBotao = () => {
+  //   const fctValidandoCamposVazios = this.validandoCamposVazios();
+  //   const ftclimitadorDeAtributos = this.limitadorDeAtributos();
+  //   const valido = fctValidandoCamposVazios && ftclimitadorDeAtributos;
+  //   // valido = false;
+  //   this.setState({
+  //     isSaveButtonDisabled: valido,
+  //   });
+  // }
     this.setState((prevState) => {
       const {
         cardName,
@@ -122,13 +137,22 @@ class App extends Component {
     this.validandoBotao();
   }
 
-  botaoQueSalvaDeck = () => {
-    const { state } = this;
-    const { deckCards } = state;
-    this.setState({ ...state, deckCards: [...deckCards, state] }, () => {
-      this.checandoTrunfo();
-    });
-  }
+  // NÃO APAGAR **********
+  // botaoQueSalvaDeck = () => {
+  //   const { state } = this;
+  //   const { deckCards } = state;
+  //   this.setState({ ...state, deckCards: [...deckCards, state] }, () => {
+  //     this.checandoTrunfo();
+  //   });
+  // }
+
+  // checandoTrunfo = () => {
+  //   const { deckCards } = this.state;
+  //   if (deckCards) {
+  //     return deckCards.some((card) => card.cardTrunfo);
+  //   }
+  //   return false;
+  // }
 
   deletaCard = (i) => {
     const { deckCards } = this.state;
@@ -139,15 +163,6 @@ class App extends Component {
       this.checandoTrunfo();
     });
   }
-
-  // deletaCard = (newCard, trunfo) => {
-  //   const { deckCards } = this.state;
-  //   const cartas = deckCards.filter((_card, index) => newCard !== index);
-  //   this.setState({
-  //     deckCards: cartas,
-  //     hasTrunfo: !trunfo,
-  //   });
-  // }
 
   // fim do espaço reservado a functions
 
@@ -162,13 +177,12 @@ class App extends Component {
       cardImage,
       cardRare,
       cardTrunfo,
-      // hasTrunfo,
+      hasTrunfo,
       isSaveButtonDisabled,
       deckCards,
     } = this.state;
 
     // Fim do espaço para descontrução.
-
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -181,7 +195,7 @@ class App extends Component {
           cardImage={ cardImage }
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
-          hasTrunfo={ this.checandoTrunfo() }
+          hasTrunfo={ hasTrunfo } // <--- Pode ser aqui ? não sei se essa porra ta certa....
           isSaveButtonDisabled={ isSaveButtonDisabled }
           onInputChange={ this.onInputChange }
           onSaveButtonClick={ this.onSaveButtonClick }
@@ -222,5 +236,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;

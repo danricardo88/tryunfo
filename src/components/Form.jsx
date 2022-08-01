@@ -29,10 +29,10 @@ class Form extends Component {
     // Fim do espaço para descontrução.
 
     return (
-      <form>
+      <div>
         <h1>Adicionar nova carta</h1>
         <br />
-        <div>
+        <fieldset>
           <label htmlFor="name-input">
             Nome:
             <input
@@ -118,17 +118,17 @@ class Form extends Component {
             </select>
           </label>
 
-          <label htmlFor="cardtrunfo">
-            {hasTrunfo ? <h2>Você já tem um Super Trunfo em seu baralho</h2> : <input
-              checked={ cardTrunfo }
-              onChange={ onInputChange }
-              name="cardTrunfo"
-              type="checkbox"
-              data-testid="trunfo-input"
-            />}
-          </label>
-
-          <br />
+          {hasTrunfo ? (<h2>Você já tem um Super Trunfo em seu baralho</h2>) : (
+            <label htmlFor="checkbox">
+              <input
+                checked={ cardTrunfo }
+                onChange={ onInputChange }
+                name="cardTrunfo"
+                type="checkbox"
+                data-testid="trunfo-input"
+              />
+              SuperTrunfo
+            </label>)}
           <button
             name="isSaveButtonDisabled"
             type="submit"
@@ -138,9 +138,8 @@ class Form extends Component {
           >
             Salvar
           </button>
-
-        </div>
-      </form>
+        </fieldset>
+      </div>
 
     );
   }
@@ -149,9 +148,9 @@ class Form extends Component {
 Form.propTypes = {
   cardName: PropTypes.string.isRequired,
   cardDescription: PropTypes.string.isRequired,
-  cardAttr1: PropTypes.string.isRequired,
-  cardAttr2: PropTypes.string.isRequired,
-  cardAttr3: PropTypes.string.isRequired,
+  cardAttr1: PropTypes.number.isRequired,
+  cardAttr2: PropTypes.number.isRequired,
+  cardAttr3: PropTypes.number.isRequired,
   cardImage: PropTypes.string.isRequired,
   cardRare: PropTypes.string.isRequired,
   cardTrunfo: PropTypes.bool.isRequired,
