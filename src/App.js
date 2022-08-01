@@ -20,12 +20,18 @@ class App extends Component {
   // espaço reservado a functions:
   onSaveButtonClick = (e) => {
     e.preventDefault();
-    const { ...carta,
+    const {
+      cardName,
+      cardDescription,
+      cardImage,
+      cardRare,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
       cardTrunfo,
-      hasTrunfo,
-      isSaveButtonDisabled, deckCards } = this.state;
-    this.setState({
-      deckCards: [...deckCards, carta],
+    } = this.state;
+    this.setState((prevState) => ({ deckCards: [{ ...prevState }],
+    }), () => this.setState({
       cardName: '',
       cardDescription: '',
       cardAttr1: '0',
@@ -33,51 +39,11 @@ class App extends Component {
       cardAttr3: '0',
       cardImage: '',
       cardRare: 'normal',
-    }, () => { // ok
-      if (deckCards === true) {
-        this.setState({
-          hasTrunfo: true,
-          cardTrunfo: false,
-        });
-      }
-    });
-  }
-  //   e.preventDefault();
-  //   const {
-  //     cardName,
-  //     cardDescription,
-  //     cardImage,
-  //     cardRare,
-  //     cardAttr1,
-  //     cardAttr2,
-  //     cardAttr3,
-  //     cardTrunfo,
-  //   } = this.state;
-  //   this.setState((prevState) => ({ deckCards: [{ ...prevState }.deckCards, {
-  //     cardName,
-  //     cardDescription,
-  //     cardImage,
-  //     cardRare,
-  //     cardAttr1,
-  //     cardAttr2,
-  //     cardAttr3,
-  //     cardTrunfo,
-  //   }],
-  //   }), () => this.setState({
-  //     cardName: '',
-  //     cardDescription: '',
-  //     cardAttr1: '0',
-  //     cardAttr2: '0',
-  //     cardAttr3: '0',
-  //     cardImage: '',
-  //     cardRare: 'normal',
-  //     cardTrunfo: '',
-  //     hasTrunfo: '',
-  //     isSaveButtonDisabled: true,
-  //   }), () => this.setState({
-  //     hasTrunfo: cardTrunfo,
-  //   }));
-  // };
+      isSaveButtonDisabled: true,
+    }), () => this.setState({
+      hasTrunfo: cardTrunfo,
+    }));
+  };
 
   validandoCamposVazios = (cardName, cardDescription, cardImage, cardRare) => (
     cardName && cardDescription && cardImage && cardRare);
