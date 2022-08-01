@@ -127,7 +127,7 @@ class Form extends Component {
                 type="checkbox"
                 data-testid="trunfo-input"
               />
-              SuperTrunfo
+              Super Trunfo
             </label>)}
           <button
             name="isSaveButtonDisabled"

@@ -10,7 +10,7 @@ class App extends Component {
     cardAttr2: '',
     cardAttr3: '',
     cardImage: '',
-    cardRare: '',
+    cardRare: 'normal',
     cardTrunfo: false,
     hasTrunfo: false,
     isSaveButtonDisabled: true,
@@ -20,29 +20,40 @@ class App extends Component {
   // espaço reservado a functions:
   onSaveButtonClick = (e) => {
     e.preventDefault();
-    const {
-      cardName,
-      cardDescription,
-      cardImage,
-      cardRare,
-      cardAttr1,
-      cardAttr2,
-      cardAttr3,
-      cardTrunfo,
-    } = this.state;
-    this.setState((prevState) => ({ deckCards: [{ ...prevState }],
-    }), () => this.setState({
-      cardName: '',
-      cardDescription: '',
-      cardAttr1: '0',
-      cardAttr2: '0',
-      cardAttr3: '0',
-      cardImage: '',
-      cardRare: 'normal',
-      isSaveButtonDisabled: true,
-    }), () => this.setState({
-      hasTrunfo: cardTrunfo,
-    }));
+
+    this.setState((prevState) => {
+      const {
+        cardName,
+        cardDescription,
+        cardImage,
+        cardRare,
+        cardAttr1,
+        cardAttr2,
+        cardAttr3,
+        cardTrunfo,
+      } = this.state;
+      const carta = {
+        cardName,
+        cardDescription,
+        cardImage,
+        cardRare,
+        cardAttr1,
+        cardAttr2,
+        cardAttr3,
+        cardTrunfo,
+      };
+      return {
+        deckCards: [...prevState.deckCards, carta],
+        cardName: '',
+        cardDescription: '',
+        cardAttr1: '0',
+        cardAttr2: '0',
+        cardAttr3: '0',
+        cardImage: '',
+        cardRare: 'normal',
+        cardTrunfo: false,
+      };
+    }, this.checandoTrunfo);
   };
 
   validandoCamposVazios = (cardName, cardDescription, cardImage, cardRare) => (
@@ -103,31 +114,21 @@ class App extends Component {
     this.validandoBotao();
   }
 
-  // NÃO APAGAR **********
-  // botaoQueSalvaDeck = () => {
-  //   const { state } = this;
-  //   const { deckCards } = state;
-  //   this.setState({ ...state, deckCards: [...deckCards, state] }, () => {
-  //     this.checandoTrunfo();
-  //   });
-  // }
-
-  // checandoTrunfo = () => {
-  //   const { deckCards } = this.state;
-  //   if (deckCards) {
-  //     return deckCards.some((card) => card.cardTrunfo);
-  //   }
-  //   return false;
-  // }
-
-  deletaCard = (i) => {
+  checandoTrunfo = () => {
     const { deckCards } = this.state;
-    const deck = deckCards.map((add) => add.cardName !== i);
+    if (deckCards.some((card) => card.cardTrunfo)) {
+      this.setState({ hasTrunfo: true });
+    } else {
+      this.setState({ hasTrunfo: false });
+    }
+  }
+
+  deletaCard = (cardDescription) => {
+    const { deckCards } = this.state;
+    const deck = deckCards.filter((add) => add.cardName !== cardDescription);
     this.setState({
       deckCards: deck,
-    }, () => {
-      this.checandoTrunfo();
-    });
+    }, this.checandoTrunfo);
   }
 
   // fim do espaço reservado a functions
@@ -177,7 +178,7 @@ class App extends Component {
           cardTrunfo={ cardTrunfo }
         />
         { deckCards.map((add) => (
-          <div key={ add.cardName }>
+          <div key={ add.cardName + add.cardDescription }>
             <Card
               cardName={ add.cardName }
               cardDescription={ add.cardDescription }
